@@ -3,5 +3,4 @@ torch
 transformers
 evaluate
 streamlit       #for deployment of model on streamlit
-os
 boto3
