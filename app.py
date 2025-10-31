@@ -31,17 +31,24 @@ def download_dir(local_path, s3_prefix):
                 s3.download_file(bucket_name, s3_key, local_file)
 
 st.title("Machine learning model deployment on the server")
+st.markdown("### _Sentiment Analysis using TinyBERT tranformer_:")
 
 button = st.button("Download model")
+st.text("Please click on Download button for using first time.")
 if button:
-    with st.spinner("Please wait....Downloading."):
-        download_dir(local_path=local_path, s3_prefix=s3_prefix)
-
-text = st.text_area("Enter your review.", "Typing....")
-predict = st.button("Predict")
+    try:
+        with st.spinner("Please wait....Downloading."):
+            download_dir(local_path=local_path, s3_prefix=s3_prefix)
+    except Exception as e:
+        st.write('Facing problem for downloading model from AWS s3 server:', {e})
+        st.warning("Sorry, Can't use this model without download.")
 
 device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
-classifier = pipeline('text-classification', model='tinybert-sentiment-analysis', device=device)
+
+
+text = st.text_area("Enter your review.")
+predict = st.button("Predict")
+classifier = pipeline('text-classification', model='tinybert-sentiment-analysiskk', device=device)
 
 if predict:
     with st.spinner("Predicting...."):
